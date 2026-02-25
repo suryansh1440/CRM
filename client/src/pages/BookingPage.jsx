@@ -41,23 +41,7 @@ const BookingPage = () => {
                 try {
                     // Meta Pixel Tracking
                     if (typeof window !== 'undefined' && window.fbq) {
-                        const trackData = {
-                            ...(currentLead?.fbclid && { fbclid: currentLead.fbclid }),
-                            ...(currentLead?.utmSource && { utm_source: currentLead.utmSource }),
-                            ...(currentLead?.utmMedium && { utm_medium: currentLead.utmMedium }),
-                            ...(currentLead?.utmCampaign && { utm_campaign: currentLead.utmCampaign }),
-                            ...(currentLead?.utmContent && { utm_content: currentLead.utmContent }),
-                            ...(currentLead?.utmTerm && { utm_term: currentLead.utmTerm })
-                        };
-
-                        console.log("Meta Track Data (Booking):", trackData);
-
-                        window.fbq('track', 'CompleteRegistration', {
-                            value: 500,
-                            currency: 'USD',
-                            test_param: 'working',
-                            ...trackData
-                        });
+                        window.fbq('track', 'CompleteRegistration');
                     }
 
                     // Pass the newly scheduled event URI so the backend knows where to find the start and end times

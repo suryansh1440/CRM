@@ -47,29 +47,10 @@ const LandingPage = () => {
             if (res.success) {
                 // Meta Pixel Tracking
                 if (typeof window !== 'undefined' && window.fbq) {
-                    const trackData = {
-                        ...(storedUtm.fbclid && { fbclid: storedUtm.fbclid }),
-                        ...(storedUtm.utmSource && { utm_source: storedUtm.utmSource }),
-                        ...(storedUtm.utmMedium && { utm_medium: storedUtm.utmMedium }),
-                        ...(storedUtm.utmCampaign && { utm_campaign: storedUtm.utmCampaign }),
-                        ...(storedUtm.utmContent && { utm_content: storedUtm.utmContent }),
-                        ...(storedUtm.utmTerm && { utm_term: storedUtm.utmTerm })
-                    };
+                    window.fbq('track', 'Lead');
 
-                    console.log("Meta Track Data (Form Submit):", trackData);
-
-                    window.fbq('track', 'Lead', {
-                        value: 50,
-                        currency: 'USD',
-                        ...trackData
-                    });
                     if (data.monthlyBudget === '50k+') {
-                        window.fbq('trackCustom', 'QualifiedLead', {
-                            value: 200,
-                            currency: 'USD',
-                            test_param: 'working',
-                            ...trackData
-                        });
+                        window.fbq('track', 'QualifiedLead');
                     }
                 }
 

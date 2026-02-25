@@ -49,7 +49,15 @@ const BookingPage = () => {
                             ...(currentLead?.utmContent && { utm_content: currentLead.utmContent }),
                             ...(currentLead?.utmTerm && { utm_term: currentLead.utmTerm })
                         };
-                        window.fbq('track', 'Schedule', trackData);
+
+                        console.log("Meta Track Data (Booking):", trackData);
+
+                        window.fbq('track', 'CompleteRegistration', {
+                            value: 500,
+                            currency: 'USD',
+                            test_param: 'working',
+                            ...trackData
+                        });
                     }
 
                     // Pass the newly scheduled event URI so the backend knows where to find the start and end times

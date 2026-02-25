@@ -55,9 +55,21 @@ const LandingPage = () => {
                         ...(storedUtm.utmContent && { utm_content: storedUtm.utmContent }),
                         ...(storedUtm.utmTerm && { utm_term: storedUtm.utmTerm })
                     };
-                    window.fbq('track', 'Lead', trackData);
+
+                    console.log("Meta Track Data (Form Submit):", trackData);
+
+                    window.fbq('track', 'Lead', {
+                        value: 50,
+                        currency: 'USD',
+                        ...trackData
+                    });
                     if (data.monthlyBudget === '50k+') {
-                        window.fbq('trackCustom', 'QualifiedLead', trackData);
+                        window.fbq('trackCustom', 'QualifiedLead', {
+                            value: 200,
+                            currency: 'USD',
+                            test_param: 'working',
+                            ...trackData
+                        });
                     }
                 }
 

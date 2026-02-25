@@ -43,5 +43,5 @@ export const startReminderWorker = () => {
         }
     });
 
-    console.log('[Worker] Nodemailer Reminder cron job initialized (runs hourly).');
+    console.log('[Worker] Resend Reminder cron job initialized (runs hourly).');
 };

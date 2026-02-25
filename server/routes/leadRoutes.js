@@ -10,4 +10,9 @@ router.get('/stats', protect, getStats);
 router.get('/:id', getLeadById);
 router.put('/:id/book', markLeadAsBooked);
 
+// Render Wakeup Endpoint
+router.get('/wakeup/cron', (req, res) => {
+    res.status(200).json({ message: "Server is awake!" });
+});
+
 export default router;

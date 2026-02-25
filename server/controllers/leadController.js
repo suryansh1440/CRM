@@ -96,8 +96,20 @@ export const markLeadAsBooked = async (req, res) => {
 // @access  Private (Admin)
 export const getLeads = async (req, res) => {
     try {
-        // Pagination, filtering can be added here
-        const leads = await Lead.find().sort({ createdAt: -1 });
+        const filter = {};
+
+        // Amazon-style multiple selection filtering
+        if (req.query.tag) {
+            filter.tag = { $in: req.query.tag.split(',') };
+        }
+        if (req.query.monthlyBudget) {
+            filter.monthlyBudget = { $in: req.query.monthlyBudget.split(',') };
+        }
+        if (req.query.businessType) {
+            filter.businessType = { $in: req.query.businessType.split(',') };
+        }
+
+        const leads = await Lead.find(filter).sort({ createdAt: -1 });
         res.status(200).json({ success: true, count: leads.length, data: leads });
     } catch (error) {
         console.error('Error fetching leads:', error);

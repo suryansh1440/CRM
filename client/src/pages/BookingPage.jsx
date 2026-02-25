@@ -41,7 +41,14 @@ const BookingPage = () => {
                 try {
                     // Meta Pixel Tracking
                     if (typeof window !== 'undefined' && window.fbq) {
-                        const trackData = currentLead?.fbclid ? { fbclid: currentLead.fbclid } : {};
+                        const trackData = {
+                            ...(currentLead?.fbclid && { fbclid: currentLead.fbclid }),
+                            ...(currentLead?.utmSource && { utm_source: currentLead.utmSource }),
+                            ...(currentLead?.utmMedium && { utm_medium: currentLead.utmMedium }),
+                            ...(currentLead?.utmCampaign && { utm_campaign: currentLead.utmCampaign }),
+                            ...(currentLead?.utmContent && { utm_content: currentLead.utmContent }),
+                            ...(currentLead?.utmTerm && { utm_term: currentLead.utmTerm })
+                        };
                         window.fbq('track', 'Schedule', trackData);
                     }
 

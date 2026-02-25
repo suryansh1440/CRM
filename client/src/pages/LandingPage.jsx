@@ -47,7 +47,14 @@ const LandingPage = () => {
             if (res.success) {
                 // Meta Pixel Tracking
                 if (typeof window !== 'undefined' && window.fbq) {
-                    const trackData = storedUtm.fbclid ? { fbclid: storedUtm.fbclid } : {};
+                    const trackData = {
+                        ...(storedUtm.fbclid && { fbclid: storedUtm.fbclid }),
+                        ...(storedUtm.utmSource && { utm_source: storedUtm.utmSource }),
+                        ...(storedUtm.utmMedium && { utm_medium: storedUtm.utmMedium }),
+                        ...(storedUtm.utmCampaign && { utm_campaign: storedUtm.utmCampaign }),
+                        ...(storedUtm.utmContent && { utm_content: storedUtm.utmContent }),
+                        ...(storedUtm.utmTerm && { utm_term: storedUtm.utmTerm })
+                    };
                     window.fbq('track', 'Lead', trackData);
                     if (data.monthlyBudget === '50k+') {
                         window.fbq('trackCustom', 'QualifiedLead', trackData);

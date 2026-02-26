@@ -14,6 +14,25 @@ const BookingPage = () => {
 
     useEffect(() => {
         const fetchLeadData = async () => {
+            const params = new URLSearchParams(window.location.search);
+            const emailParam = params.get('email');
+            const useridParam = params.get('userid');
+            const phoneParam = params.get('phoneno');
+            const nameParam = params.get('name');
+
+            if (useridParam && emailParam) {
+                const leadData = {
+                    _id: useridParam,
+                    name: nameParam || '',
+                    email: emailParam || '',
+                    phone: phoneParam || ''
+                };
+                dispatch(setCurrentLead(leadData));
+                setLeadId(useridParam);
+                localStorage.setItem('currentLeadId', useridParam);
+                return; // We have what we need
+            }
+
             const storedId = localStorage.getItem('currentLeadId');
             if (storedId) {
                 setLeadId(storedId);
@@ -46,7 +65,7 @@ const BookingPage = () => {
 
                     // Pass the newly scheduled event URI so the backend knows where to find the start and end times
                     await markAsBooked(leadId || currentLead._id, e.data.payload.event.uri);
-                    navigate('/'); // Send them to the dashboard/landing page after booking
+                    window.location.href = 'https://www.bitlancetechhub.com/';
                 } catch (error) {
                     console.error("Failed to mark lead as booked after Calendly event:", error);
                 }

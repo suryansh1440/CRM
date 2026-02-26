@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Zap, CheckCircle, ArrowRight, Loader, Calendar } from 'lucide-react';
+import { Zap, CheckCircle, Loader, Star, Shield, Lock } from 'lucide-react';
 import { createLead } from '../services/api';
 import { setCurrentLead } from '../store/leadSlice';
 
 const LandingPage = () => {
-    const { register, handleSubmit, formState: { errors, isValid } } = useForm({
+    const { register, handleSubmit, formState: { errors, isValid }, watch, trigger } = useForm({
         mode: 'onChange' // For real-time validation
     });
+    const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -57,7 +58,7 @@ const LandingPage = () => {
                 localStorage.setItem('currentLeadId', res.data._id);
                 dispatch(setCurrentLead(res.data)); // Storing in Redux for BookingPage
                 if (action === 'download') {
-                    navigate('/thank-you');
+                    window.location.href = 'https://www.bitlancetechhub.com/';
                 } else {
                     navigate('/booking');
                 }
@@ -85,151 +86,254 @@ const LandingPage = () => {
             </nav>
 
             {/* Hero Section */}
-            <main className="max-w-7xl mx-auto px-6 lg:px-8 py-20 flex flex-col lg:flex-row items-center gap-16">
+            <main className="max-w-7xl mx-auto px-6 lg:px-8 py-16 flex flex-col lg:flex-row items-center gap-16">
 
                 {/* Left Column: Copy */}
                 <div className="lg:w-1/2 flex flex-col items-start text-left space-y-8 relative">
 
-                    <div className="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 text-sm text-blue-400 mb-2">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                        </span>
-                        <span>Version 2.0 Live Now</span>
-                    </div>
-
                     <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tighter leading-[1.1]">
-                        Automate Your <br />
+                        Stop Losing <br />
                         <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-emerald-400">
-                            Lead Generation
-                        </span>
+                            High-Intent Leads
+                        </span><br />
+                        Every Week.
                     </h1>
 
-                    <p className="text-lg md:text-xl text-neutral-400 max-w-lg leading-relaxed">
-                        Capture, qualify, and convert leads while you sleep. Stop letting potential customers slip through the cracks.
+                    <p className="text-lg md:text-xl text-neutral-400 max-w-lg leading-relaxed font-medium">
+                        Turn Ad Clicks into Qualified, Booked Sales Calls — Automatically.
                     </p>
 
-                    <div className="space-y-4 text-neutral-300 w-full mt-4">
-                        {['24/7 Automated Follow-ups', 'Smart Lead Scoring Engine', 'Seamless CRM Integration'].map((feature, i) => (
+                    <div className="flex items-center space-x-2 text-sm text-neutral-500 font-medium">
+                        <div className="flex -space-x-2">
+                            {[1, 2, 3, 4].map((i) => (
+                                <div key={i} className={`w-8 h-8 rounded-full border-2 border-neutral-950 bg-neutral-800 flex items-center justify-center text-xs text-neutral-400 z-${5 - i}`}>
+                                    {String.fromCharCode(64 + i)}
+                                </div>
+                            ))}
+                        </div>
+                        <span className="pl-3">Trusted by 120+ growing service businesses.</span>
+                    </div>
+
+                    <div className="space-y-4 text-neutral-300 w-full mt-4 bg-neutral-900/50 p-6 rounded-2xl border border-neutral-800">
+                        <h3 className="font-semibold text-white mb-2 flex items-center"><Zap className="w-5 h-5 text-yellow-500 mr-2" /> What you actually get:</h3>
+                        {['Automated 24/7 Follow-Ups', 'Qualified Leads Only', 'Zero Manual Tracking', 'Calendar Filled With Sales Calls'].map((feature, i) => (
                             <div key={i} className="flex items-center space-x-3">
                                 <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0" />
-                                <span className="font-medium">{feature}</span>
+                                <span className="font-medium text-neutral-200">{feature}</span>
                             </div>
                         ))}
                     </div>
 
                 </div>
 
-                {/* Right Column: Smart Form */}
-                <div className="lg:w-1/2 w-full max-w-md bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden relative" id="demo">
+                {/* Right Column: 2-Step Smart Form */}
+                <div className="lg:w-1/2 w-full max-w-md bg-neutral-900 border border-neutral-800 rounded-3xl shadow-[0_0_50px_-12px_rgba(59,130,246,0.15)] overflow-hidden relative" id="demo">
                     {/* Subtle gradient glow behind form */}
                     <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full pointer-events-none"></div>
 
-                    <div className="p-8">
-                        <h2 className="text-2xl font-bold mb-2 tracking-tight">Get Your Blueprint</h2>
-                        <p className="text-neutral-400 text-sm mb-6">See how AutoSync works for your exact business model.</p>
-
-                        <form className="space-y-4">
-                            <div className="space-y-1">
-                                <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Name</label>
-                                <input
-                                    {...register("name", { required: true })}
-                                    className={`w-full bg-neutral-950 border ${errors.name ? 'border-red-500' : 'border-neutral-800'} rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all`}
-                                    placeholder="John Doe"
-                                />
+                    <div className="p-8 sm:p-10">
+                        {/* Step Indicator */}
+                        <div className="flex items-center justify-between pl-1 mb-8">
+                            <span className="text-xs font-bold tracking-widest uppercase text-blue-500">Step {step} of 2</span>
+                            <div className="flex space-x-2">
+                                <div className={`h-1.5 w-8 rounded-full transition-colors ${step >= 1 ? 'bg-blue-500' : 'bg-neutral-800'}`}></div>
+                                <div className={`h-1.5 w-8 rounded-full transition-colors ${step >= 2 ? 'bg-blue-500' : 'bg-neutral-800'}`}></div>
                             </div>
+                        </div>
 
-                            <div className="space-y-1">
-                                <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Work Email</label>
-                                <input
-                                    type="email"
-                                    {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
-                                    className={`w-full bg-neutral-950 border ${errors.email ? 'border-red-500' : 'border-neutral-800'} rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all`}
-                                    placeholder="john@company.com"
-                                />
-                            </div>
+                        {step === 1 && (
+                            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                                <h2 className="text-3xl font-extrabold mb-3 tracking-tight">Let's customize your growth plan.</h2>
+                                <p className="text-neutral-400 text-sm mb-8">What industry are you in?</p>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                    <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Phone</label>
-                                    <input
-                                        {...register("phone", { required: true })}
-                                        className={`w-full bg-neutral-950 border ${errors.phone ? 'border-red-500' : 'border-neutral-800'} rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all`}
-                                        placeholder="+1 234 567 890"
-                                    />
-                                </div>
+                                <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); }}>
 
-                                <div className="space-y-1">
-                                    <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Business Type</label>
-                                    <select
-                                        {...register("businessType", { required: true })}
-                                        className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none"
+                                    <div className="space-y-3">
+                                        {['Real Estate', 'Clinic', 'Education', 'Other'].map((type) => (
+                                            <label
+                                                key={type}
+                                                className={`flex items-center p-4 border rounded-xl cursor-pointer transition-all duration-200 ${watch('businessType') === type ? 'border-blue-500 bg-blue-500/10' : 'border-neutral-800 bg-neutral-950 hover:bg-neutral-900 hover:border-neutral-700'}`}
+                                            >
+                                                <input
+                                                    type="radio"
+                                                    value={type}
+                                                    {...register("businessType", { required: true })}
+                                                    className="w-4 h-4 text-blue-500 bg-neutral-900 border-neutral-700 focus:ring-blue-500 focus:ring-offset-neutral-900 focus:ring-2"
+                                                />
+                                                <span className={`ml-3 font-semibold ${watch('businessType') === type ? 'text-white' : 'text-neutral-300'}`}>{type}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        disabled={!watch('businessType')}
+                                        onClick={async () => {
+                                            const isValidStep = await trigger("businessType");
+                                            if (isValidStep) setStep(2);
+                                        }}
+                                        className="w-full flex items-center justify-center space-x-2 bg-white text-neutral-950 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-200 px-6 py-4 rounded-xl font-bold transition-all outline-none focus:ring-4 focus:ring-white/20 mt-4"
                                     >
-                                        <option value="Real Estate">Real Estate</option>
-                                        <option value="Clinic">Clinic</option>
-                                        <option value="Education">Education</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
+                                        <span>Continue</span>
+                                    </button>
+                                </form>
                             </div>
+                        )}
 
-                            <div className="space-y-1">
-                                <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Monthly Budget</label>
-                                <select
-                                    {...register("monthlyBudget", { required: true })}
-                                    className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none"
-                                >
-                                    <option value="< 10k">Under $10k / mo</option>
-                                    <option value="10k - 50k">$10k - $50k / mo</option>
-                                    <option value="50k+">$50k+ / mo</option>
-                                </select>
+                        {step === 2 && (
+                            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                                <h2 className="text-3xl font-extrabold mb-3 tracking-tight">Almost there.</h2>
+                                <p className="text-neutral-400 text-sm mb-8">Where should we send your blueprint?</p>
+
+                                <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); }}>
+                                    <div className="space-y-1.5">
+                                        <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Full Name</label>
+                                        <input
+                                            {...register("name", { required: true })}
+                                            className={`w-full bg-neutral-950 border ${errors.name ? 'border-red-500' : 'border-neutral-800'} rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all font-medium placeholder:text-neutral-600`}
+                                            placeholder="Jane Doe"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Work Email</label>
+                                        <input
+                                            type="email"
+                                            {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
+                                            className={`w-full bg-neutral-950 border ${errors.email ? 'border-red-500' : 'border-neutral-800'} rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all font-medium placeholder:text-neutral-600`}
+                                            placeholder="jane@company.com"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Phone Number</label>
+                                        <input
+                                            {...register("phone", { required: true })}
+                                            className={`w-full bg-neutral-950 border ${errors.phone ? 'border-red-500' : 'border-neutral-800'} rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all font-medium placeholder:text-neutral-600`}
+                                            placeholder="+1 (555) 000-0000"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Monthly Marketing Budget</label>
+                                        <select
+                                            {...register("monthlyBudget", { required: true })}
+                                            className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all appearance-none font-medium"
+                                        >
+                                            <option value="" disabled selected>Select an option</option>
+                                            <option value="< 10k">Under $10k / mo</option>
+                                            <option value="10k - 50k">$10k - $50k / mo</option>
+                                            <option value="50k+">$50k+ / mo</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Primary CTA */}
+                                    <div className="pt-4 space-y-4">
+                                        <button
+                                            type="button"
+                                            disabled={!isValid || loading}
+                                            onClick={handleSubmit((data) => onSubmit(data, 'book'))}
+                                            className="w-full flex items-center justify-center space-x-2 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-4 rounded-xl font-bold shadow-[0_0_40px_-5px_rgba(59,130,246,0.5)] transition-all outline-none focus:ring-4 focus:ring-blue-500/30 text-lg"
+                                        >
+                                            {loading ? (
+                                                <Loader className="w-6 h-6 animate-spin" />
+                                            ) : (
+                                                <span>Book My Free Strategy Call</span>
+                                            )}
+                                        </button>
+
+                                        {/* Security / Trust text under button */}
+                                        <div className="flex items-center justify-center text-xs text-neutral-500 space-x-1.5">
+                                            <Lock className="w-3.5 h-3.5" />
+                                            <span>Your information is 100% secure. No spam ever.</span>
+                                        </div>
+
+                                        {/* Secondary CTA */}
+                                        <div className="pt-2 pb-1 text-center">
+                                            <button
+                                                type="button"
+                                                disabled={!isValid || loading}
+                                                onClick={handleSubmit((data) => onSubmit(data, 'download'))}
+                                                className="text-sm font-medium text-neutral-500 hover:text-white underline underline-offset-4 decoration-neutral-700 hover:decoration-neutral-400 transition-colors bg-transparent border-none cursor-pointer disabled:opacity-50"
+                                            >
+                                                Nah, just let me download the Blueprint PDF
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-4 mt-4 border-t border-neutral-800">
+                                        <button
+                                            type="button"
+                                            onClick={() => setStep(1)}
+                                            className="text-xs text-neutral-500 hover:text-white transition-colors flex items-center"
+                                        >
+                                            ← Back to previous step
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
-
-                            <div className="flex items-center space-x-3 pt-2">
-                                <input
-                                    type="checkbox"
-                                    {...register("readyToAutomate")}
-                                    className="w-4 h-4 bg-neutral-900 border-neutral-700 rounded focus:ring-blue-500 text-blue-500"
-                                />
-                                <label className="text-sm text-neutral-400">Yes, I am ready to automate my sales funnel.</label>
-                            </div>
-
-                            {/* Dynamic CTAs */}
-                            <div className="pt-6 space-y-3">
-                                <button
-                                    type="button"
-                                    disabled={!isValid || loading}
-                                    onClick={handleSubmit((data) => onSubmit(data, 'download'))}
-                                    className="w-full relative group bg-neutral-800 hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3.5 rounded-lg font-medium transition-all"
-                                >
-                                    {loading ? <Loader className="w-5 h-5 mx-auto animate-spin" /> : 'Download Free Guide (PDF)'}
-                                </button>
-
-                                <div className="relative flex items-center py-1">
-                                    <div className="grow border-t border-neutral-800"></div>
-                                    <span className="shrink-0 mx-4 text-xs text-neutral-500 uppercase font-semibold tracking-wider">or</span>
-                                    <div className="grow border-t border-neutral-800"></div>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    disabled={!isValid || loading}
-                                    onClick={handleSubmit((data) => onSubmit(data, 'book'))}
-                                    className="w-full flex items-center justify-center space-x-2 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3.5 rounded-lg font-bold shadow-lg shadow-blue-500/25 transition-all outline-none ring-2 ring-transparent focus:ring-blue-500/50"
-                                >
-                                    {loading ? (
-                                        <Loader className="w-5 h-5 animate-spin" />
-                                    ) : (
-                                        <><Calendar className="w-5 h-5" /> <span>Book Live Strategy Demo</span></>
-                                    )}
-                                </button>
-                            </div>
-                        </form>
-
+                        )}
                     </div>
                 </div>
 
             </main>
+
+            {/* Trust Bar Section */}
+            <section className="border-y border-neutral-800/80 bg-neutral-900/30 py-10 mt-10">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-neutral-800 text-center">
+                    <div className="flex flex-col items-center justify-center pt-4 md:pt-0">
+                        <div className="text-3xl font-black text-white mb-1">127+</div>
+                        <div className="text-sm font-medium text-neutral-400 uppercase tracking-widest">Clients Automated</div>
+                    </div>
+                    <div className="flex flex-col items-center justify-center pt-8 md:pt-0">
+                        <div className="text-3xl font-black text-white mb-1">1,200+</div>
+                        <div className="text-sm font-medium text-neutral-400 uppercase tracking-widest">Qualified Calls Generated</div>
+                    </div>
+                    <div className="flex flex-col items-center justify-center pt-8 md:pt-0">
+                        <div className="flex items-center space-x-1 mb-2 text-yellow-400">
+                            {[1, 2, 3, 4, 5].map(i => <Star key={i} fill="currentColor" className="w-6 h-6" />)}
+                        </div>
+                        <div className="text-sm font-medium text-neutral-400 uppercase tracking-widest">4.9/5 Client Satisfaction</div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Social Proof Section */}
+            <section className="py-24 max-w-7xl mx-auto px-6 lg:px-8">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4 text-white">Here's What Our Clients Are Saying</h2>
+                    <p className="text-neutral-400 text-lg max-w-2xl mx-auto">Real results from real founders who decided to stop doing manual outreach.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    {/* Testimonial 1 */}
+                    <div className="bg-neutral-900 border border-neutral-800 p-8 rounded-2xl relative">
+                        <Star className="absolute top-6 right-6 w-8 h-8 text-neutral-800/50" fill="currentColor" />
+                        <p className="text-lg text-neutral-300 italic mb-6">"We went from 5 leads a week to 25 booked calls in 30 days. AutoSync replaced our SDR completely, and the leads are actually qualified."</p>
+                        <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 rounded-full bg-blue-500/20 text-blue-500 flex items-center justify-center font-bold text-lg">M</div>
+                            <div>
+                                <div className="font-bold text-white">Marcus T.</div>
+                                <div className="text-sm text-neutral-500">Real Estate Agency Owner</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Testimonial 2 */}
+                    <div className="bg-neutral-900 border border-neutral-800 p-8 rounded-2xl relative">
+                        <Star className="absolute top-6 right-6 w-8 h-8 text-neutral-800/50" fill="currentColor" />
+                        <p className="text-lg text-neutral-300 italic mb-6">"I used to spend 3 hours a day just following up via email and text. Now, I just wake up and check my Google Calendar. Best decision ever."</p>
+                        <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center font-bold text-lg">S</div>
+                            <div>
+                                <div className="font-bold text-white">Sarah Jenkins</div>
+                                <div className="text-sm text-neutral-500">Clinic Director</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </div>
     );
 };

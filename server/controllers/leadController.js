@@ -1,7 +1,7 @@
 import { Lead } from '../models/Lead.js';
 import axios from 'axios';
 import { sendEmail } from '../utils/sendEmail.js';
-import { PDF_DELIVERY_TEMPLATE } from '../constants/emailTemplates.js';
+import { PDF_DELIVERY_TEMPLATE, BOOKING_CONFIRMATION_TEMPLATE } from '../constants/emailTemplates.js';
 
 // @desc    Create a new lead (Landing Page submission)
 // @route   POST /api/leads
@@ -29,7 +29,7 @@ export const createLead = async (req, res) => {
                 await sendEmail(
                     email,
                     'Your CRM Automation Guide inside \uD83D\uDCE6',
-                    PDF_DELIVERY_TEMPLATE(name)
+                    PDF_DELIVERY_TEMPLATE(lead)
                 );
             } catch (emailError) {
                 console.error('Failed to send PDF delivery email:', emailError);
@@ -82,6 +82,24 @@ export const markLeadAsBooked = async (req, res) => {
 
         if (!lead) {
             return res.status(404).json({ success: false, message: 'Lead not found' });
+        }
+
+        // Send booking confirmation email
+        try {
+            let formattedTime = null;
+            if (bookingStartTime) {
+                formattedTime = new Date(bookingStartTime).toLocaleString('en-US', {
+                    weekday: 'long', month: 'long', day: 'numeric',
+                    hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
+                });
+            }
+            await sendEmail(
+                lead.email,
+                'Your Strategy Session is Confirmed! ✅',
+                BOOKING_CONFIRMATION_TEMPLATE(lead.name, formattedTime)
+            );
+        } catch (emailError) {
+            console.error('Failed to send booking confirmation email:', emailError);
         }
 
         res.status(200).json({ success: true, data: lead });

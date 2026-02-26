@@ -27,7 +27,7 @@ export const startReminderWorker = () => {
                     await sendEmail(
                         lead.email,
                         'Quick question about your automation guide...',
-                        REMINDER_EMAIL_TEMPLATE(lead.name)
+                        REMINDER_EMAIL_TEMPLATE(lead)
                     );
 
                     // Update lead to mark reminder as sent

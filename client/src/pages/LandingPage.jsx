@@ -76,9 +76,8 @@ const LandingPage = () => {
 
             {/* Navigation (Mock) */}
             <nav className="w-full h-20 flex justify-between items-center px-8 lg:px-24 border-b border-neutral-800/60 bg-neutral-950/80 backdrop-blur-md sticky top-0 z-50">
-                <div className="flex items-center space-x-2">
-                    <Zap className="w-6 h-6 text-blue-500" />
-                    <span className="font-bold text-xl tracking-tight">AutoSync CRM</span>
+                <div className="flex items-center space-x-3">
+                    <img src="/logo-BG7H5kD_.webp" alt="Bitlance Logo" className="h-10 object-contain" />
                 </div>
                 <a href="#demo" className="text-sm font-medium text-neutral-400 hover:text-white transition-colors">
                     Book Demo
@@ -309,7 +308,7 @@ const LandingPage = () => {
                     {/* Testimonial 1 */}
                     <div className="bg-neutral-900 border border-neutral-800 p-8 rounded-2xl relative">
                         <Star className="absolute top-6 right-6 w-8 h-8 text-neutral-800/50" fill="currentColor" />
-                        <p className="text-lg text-neutral-300 italic mb-6">"We went from 5 leads a week to 25 booked calls in 30 days. AutoSync replaced our SDR completely, and the leads are actually qualified."</p>
+                        <p className="text-lg text-neutral-300 italic mb-6">"We went from 5 leads a week to 25 booked calls in 30 days. Bitlance replaced our SDR completely, and the leads are actually qualified."</p>
                         <div className="flex items-center space-x-4">
                             <div className="w-12 h-12 rounded-full bg-blue-500/20 text-blue-500 flex items-center justify-center font-bold text-lg">M</div>
                             <div>
